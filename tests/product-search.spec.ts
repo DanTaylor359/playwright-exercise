@@ -6,22 +6,21 @@ test('Product Search — search for Dress', async ({ page }) => {
   const home = new HomePage(page);
   const products = new ProductsPage(page);
 
-  // Navigate to home
-  await home.goToHome();
+  await test.step('Navigate to Products page', async () => {
+    await home.goToHome();
+    await home.clickNavigationLabel('Products');
+  });
 
-  // Go to Products page
-  await home.clickNavigationLabel('Products');
+  await test.step('Search for "Dress"', async () => {
+    await products.search('Dress');
+    await expect(products.resultsContainer).toBeVisible();
+  });
 
-  // Search for "Dress"
-  await products.search('Dress');
+  await test.step('Verify all results contain "dress"', async () => {
+    const names = await products.productNames.allTextContents();
 
-  // Assert results are visible
-  expect(await products.isResultsVisible()).toBeTruthy();
-
-  // Assert all product names contain "Dress" (case-insensitive)
-  const names = await products.getSearchResults().allTextContents();
-
-  for (const name of names) {
-    expect(name.toLowerCase()).toContain('dress');
-  }
+    for (const name of names) {
+      expect(name.toLowerCase()).toContain('dress');
+    }
+  });
 });

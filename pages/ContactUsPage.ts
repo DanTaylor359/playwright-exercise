@@ -1,42 +1,50 @@
 import { Page } from '@playwright/test';
 
 export class ContactUsPage {
-  constructor(private page: Page) {}
+  private nameInput;
+  private emailInput;
+  private subjectInput;
+  private messageInput;
+  private submitButton;
+  private successAlert;
+
+  constructor(private page: Page) {
+    this.nameInput = page.locator('[data-qa="name"]');
+    this.emailInput = page.locator('[data-qa="email"]');
+    this.subjectInput = page.locator('[data-qa="subject"]');
+    this.messageInput = page.locator('[data-qa="message"]');
+    this.submitButton = page.locator('[data-qa="submit-button"]');
+    this.successAlert = page.locator('.status.alert.alert-success');
+  }
 
   async fillName(name: string) {
-    await this.page.getByPlaceholder('Name').fill(name);
+    await this.nameInput.fill(name);
   }
 
   async fillEmail(email: string) {
-    //await this.page.getByPlaceholder('Email').fill(email); // <-- matches two elements
-    await this.page.locator('.contact-form').getByPlaceholder('Email').fill(email);  // <-- more specific selector to target the correct input
+    await this.emailInput.fill(email);
   }
 
   async fillSubject(subject: string) {
-    await this.page.getByPlaceholder('Subject').fill(subject);
+    await this.subjectInput.fill(subject);
   }
 
   async fillMessage(message: string) {
-    await this.page.getByPlaceholder('Your Message Here').fill(message);
+    await this.messageInput.fill(message);
   }
 
   async submitForm() {
     this.page.once('dialog', dialog => dialog.accept());
-    await this.page.getByRole('button', { name: 'Submit' }).click();
+    await this.submitButton.click();
   }
 
   successMessage() {
-    return this.page.locator('.status.alert.alert-success');
+    return this.successAlert;
   }
 
-//  async clickHomeButton() {
-//    await this.page.getByRole('link', { name: 'Home' }).click(); // <-- matches two elements
-//  }
-//}
-
   async clickHomeButton() {
-      //await this.page.getByRole('link', { name: 'Home' }).click(); // <-- matches two elements
-      await this.page
+    //await this.page.getByRole('link', { name: 'Home' }).click(); // Didn't use this as matches two elements
+    await this.page
       .locator('.contact-form')
       .getByRole('link', { name: 'Home' })
       .click();
