@@ -8,8 +8,8 @@ export class TransreportHomePage extends BasePage {
   }
 
   async clickNavigationLabel(label: string) {
-    //await this.dismissCookiesIfPresent();
-    //await this.page.getByRole('link', { name: label }).click();
+    //await this.dismissCookiesIfPresent();                         // for reference, will delete if not needed
+    //await this.page.getByRole('link', { name: label }).click();   // for reference, will
     await this.page.locator('#menu-main-menu').getByRole('link', { name: label }).click();
 
     // Validate the selected navigation item (green text)
